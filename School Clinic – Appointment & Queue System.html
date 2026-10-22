@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>School Clinic – Appointment & Queue System</title>
+<style>
+:root{--bg:#f4f8ff;--card:#fff;--tx:#0f1b33;--mu:#6b7a96;--ln:#e3eaf6;--pri:#2563eb;--ps:#e8f0ff;--ok:#16a34a;--oks:#dcfce7;--wn:#d97706;--wns:#fff1d6;--bd:#dc2626;--bds:#fee2e2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0b1220;--card:#121b2e;--tx:#e8eefc;--mu:#93a3c0;--ln:#22304d;--ps:#16264a;--oks:#0f2e1c;--wns:#3a2a0a;--bds:#3a1517;--pri:#4f8bff}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0b1220;--card:#121b2e;--tx:#e8eefc;--mu:#93a3c0;--ln:#22304d;--ps:#16264a;--oks:#0f2e1c;--wns:#3a2a0a;--bds:#3a1517;--pri:#4f8bff}
+*{box-sizing:border-box}html,body{min-height:100%}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}h1,h2,h3{margin:0}.mu,small{color:var(--mu)}small{font-size:12px}
+.ph{max-width:460px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding:16px 16px 0}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:16px;margin-bottom:12px}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:10px;padding:11px 16px;font-weight:600;cursor:pointer;width:100%}
+.btn.s{width:auto;padding:6px 14px;font-size:13px}.btn.o{background:var(--card);color:var(--tx);border:1px solid var(--ln)}.btn.r{background:var(--bds);color:var(--bd)}.btn:disabled{opacity:.4;cursor:default}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--ln);border-radius:10px;background:var(--card);margin-bottom:10px}
+.bg{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}.b-w{background:var(--wns);color:var(--wn)}.b-p{background:var(--ps);color:var(--pri)}.b-o{background:var(--oks);color:var(--ok)}.b-r{background:var(--bds);color:var(--bd)}
+.big{font-size:42px;font-weight:700;color:var(--pri);line-height:1.1}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.clk{cursor:pointer}
+.nav{position:sticky;bottom:0;margin:auto -16px 0;background:var(--card);border-top:1px solid var(--ln);display:flex;padding:8px 0}.nav button{flex:1;background:none;border:0;color:var(--mu);font-size:11px;cursor:pointer;position:relative}.nav button.on{color:var(--pri);font-weight:700}.nav span{display:block;font-size:20px}
+.dot{position:absolute;top:-2px;right:26%;background:var(--bd);color:#fff;border-radius:99px;font-size:10px;padding:0 5px}
+.cm{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.ic{background:none;border:0;font-size:24px;cursor:pointer;color:var(--tx)}
+.cg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}.d{aspect-ratio:1;border:0;background:none;border-radius:50%;cursor:pointer}.d:disabled{opacity:.3;cursor:default}.d.sel{background:var(--pri);color:#fff}
+.sl{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.sl button{padding:10px 0;border:1px solid var(--ln);background:var(--card);border-radius:8px;cursor:pointer}.sl .sel{background:var(--pri);color:#fff}.sl button:disabled{opacity:.35;cursor:default}
+.tl{padding-left:26px;margin-top:10px}.tl div{position:relative;padding:9px 0}.tl div:before{content:"";position:absolute;left:-26px;top:13px;width:14px;height:14px;border-radius:50%;background:var(--ln)}.tl .dn:before{background:var(--ok)}.tl .cur:before{background:var(--card);border:4px solid var(--pri)}.tl .cur{font-weight:700}
+.lg{max-width:380px;margin:0 auto;padding:40px 20px;text-align:center}.logo{width:64px;height:64px;border-radius:16px;background:var(--pri);color:#fff;font-size:36px;display:grid;place-items:center;margin:0 auto 10px}.lg form{margin-top:24px;text-align:left}
+.err{color:var(--bd);font-size:13px;margin:0 0 8px}
+.sd{display:grid;grid-template-columns:220px 1fr;min-height:100vh}aside{background:var(--card);border-right:1px solid var(--ln);padding:16px;display:flex;flex-direction:column;gap:4px}aside .brand{font-size:17px;margin-bottom:14px}
+aside button{text-align:left;border:0;background:none;padding:10px 12px;border-radius:10px;cursor:pointer;color:var(--mu);white-space:nowrap}aside button.on{background:var(--ps);color:var(--pri);font-weight:700}
+main{padding:20px;min-width:0}.top{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:12px}.top input{max-width:360px;margin:0}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--ln);font-size:14px}th{color:var(--mu);font-size:12px}.tw{overflow-x:auto}
+.tabs{display:flex;gap:18px;border-bottom:1px solid var(--ln);margin-bottom:14px}.tabs button{background:none;border:0;padding:8px 2px;cursor:pointer;color:var(--mu)}.tabs .on{color:var(--pri);border-bottom:2px solid var(--pri);font-weight:700}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.bar{height:10px;border-radius:5px;background:var(--pri);min-width:4px}.f{display:flex;gap:8px;flex-wrap:wrap}.f>*{flex:1;min-width:120px;margin:0}
+#toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:99px;font-size:14px;display:none;z-index:9}
+@media(max-width:760px){.sd{grid-template-columns:1fr}aside{flex-direction:row;overflow-x:auto;align-items:center;border-right:0;border-bottom:1px solid var(--ln)}aside .brand{display:none}}
+</style></head><body><div id="app"></div><div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pad=n=>String(n).padStart(2,'0'),iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const fd=s=>new Date(s+'T00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}),ft=h=>(h%12||12)+':00 '+(h<12?'AM':'PM');
+const tm=t=>new Date(t).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+const REASONS=['Check-up','Fever','Headache','Consultation','Injury / First aid','Medical certificate','Follow-up','Other'];
+const K='schoolclinic.v1';let mem=null;
+function seed(){let n=new Date();n.setDate(n.getDate()+1);while(n.getDay()%6===0)n.setDate(n.getDate()+1);const d=iso(n);
+return{ctr:14,id:10,users:[{id:'2024-001',name:'Maria Lopez',role:'student',pw:'demo',on:1},{id:'2024-002',name:'Juan Dela Cruz',role:'student',pw:'demo',on:1},{id:'2024-003',name:'Carlos Santos',role:'student',pw:'demo',on:1},{id:'staff',name:'Dr. Santos',role:'staff',pw:'demo',on:1},{id:'nurse',name:'Nurse Reyes',role:'staff',pw:'demo',on:1},{id:'admin',name:'Ms. Cruz',role:'admin',pw:'demo',on:1}],
+appts:[{id:1,sid:'2024-002',name:'Juan Dela Cruz',date:d,h:9,reason:'Fever',status:'confirmed'},{id:2,sid:'2024-003',name:'Carlos Santos',date:d,h:11,reason:'Consultation',status:'confirmed'}],
+queue:[{id:1,num:'A12',sid:'2024-002',name:'Juan Dela Cruz',pri:'Urgent',reason:'Fever',status:'waiting',t:Date.now()-600000},{id:2,num:'A13',sid:'2024-003',name:'Carlos Santos',pri:'Routine',reason:'Headache',status:'waiting',t:Date.now()-300000}],
+notifs:[],set:{name:'School Clinic',open:8,close:16,avg:5}}}
+function load(){try{const s=localStorage.getItem(K);if(s)return JSON.parse(s)}catch(e){}return mem}
+function save(){mem=db;try{localStorage.setItem(K,JSON.stringify(db))}catch(e){}}
+let db=load()||seed();
+addEventListener('storage',e=>{if(e.key===K){db=load()||db;R()}});
+let ui={u:null,tab:'home',sub:null,b:{step:1,m:new Date(),date:null,h:null,reason:'Check-up',notes:''},at:'up',q:'',st:'users',mode:'in',err:'',f:false};
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2200)}
+function notify(sid,title,sub,type){if(sid)db.notifs.unshift({id:db.id++,sid,title,sub,type,t:Date.now(),r:0})}
+const ord=(a,b)=>(b.pri==='Urgent')-(a.pri==='Urgent')||a.t-b.t;
+const act=q=>['waiting','called','attended'].includes(q.status);
+const myq=()=>db.queue.find(q=>q.sid===ui.u.id&&act(q));
+function est(q){if(q.status==='called')return 'Please proceed now';if(q.status==='attended')return 'Being attended';const i=db.queue.filter(x=>x.status==='waiting').sort(ord).findIndex(x=>x.id===q.id);return '~ '+(i+1)*db.set.avg+' minutes'}
+const LBL={waiting:'Waiting',called:'Called',attended:'Being attended',completed:'Completed',confirmed:'Confirmed',cancelled:'Cancelled'},CLS={waiting:'w',called:'p',attended:'p',completed:'o',confirmed:'o',cancelled:'r'};
+const bdg=s=>`<span class="bg b-${CLS[s]}">${LBL[s]}</span>`;
+function join(sid,name,reason,pri){const q={id:db.id++,num:'A'+db.ctr++,sid,name,pri,reason,status:'waiting',t:Date.now()};db.queue.push(q);notify(sid,'Queue update',`Your queue number is ${q.num}.`,'q');save();return q}
+function setS(id,s){const q=db.queue.find(x=>x.id===id);q.status=s;const m={called:['It’s your turn','Please proceed to the clinic.','ok'],attended:['You are now being attended','The clinic staff will see you now.','i'],completed:['Visit completed','Thank you for visiting the clinic.','ok']}[s];if(m)notify(q.sid,m[0],m[1],m[2]);save();R()}
+/* ---------- auth ---------- */
+function err(m){ui.err=m;R()}
+function auth(e){e.preventDefault();const f=e.target,id=f.sid.value.trim(),pw=f.pw.value;let u;
+if(ui.mode==='up'){const nm=f.nm.value.trim();if(!id||!nm||!pw)return err('Please fill in all fields.');if(db.users.some(x=>x.id.toLowerCase()===id.toLowerCase()))return err('That ID is already registered.');u={id,name:nm,role:'student',pw,on:1};db.users.push(u);save()}
+else{u=db.users.find(x=>x.id.toLowerCase()===id.toLowerCase()&&x.pw===pw);if(!u)return err('Incorrect ID or password.');if(!u.on)return err('This account is inactive.')}
+login(u)}
+function login(u){ui.u=u;ui.tab=u.role==='student'?'home':'queue';ui.sub=null;ui.err='';ui.q='';R()}
+const demo=id=>login(db.users.find(x=>x.id===id));
+function logout(){ui.u=null;ui.mode='in';R()}
+function loginV(){const up=ui.mode==='up';return`<div class="lg"><div class="logo">✚</div><h1>${esc(db.set.name)}</h1><p class="mu">Appointment & Queue System</p>
+<form onsubmit="auth(event)">${up?'<input name="nm" placeholder="Full name">':''}<input name="sid" placeholder="${up?'Student ID':'Student / Staff ID'}" autocomplete="username"><input name="pw" type="password" placeholder="Password" autocomplete="current-password">${ui.err?`<p class="err">${ui.err}</p>`:''}
+<button class="btn">${up?'Create account':'Log In'}</button></form><p class="mu">or</p><button class="btn o" onclick="ui.mode='${up?'in':'up'}';ui.err='';R()">${up?'Back to Log In':'Sign Up'}</button>
+<div class="card" style="margin-top:22px"><small>Try a demo account (password: demo)</small><div class="f" style="margin-top:8px"><button class="btn o s" onclick="demo('2024-001')">Student</button><button class="btn o s" onclick="demo('staff')">Clinic staff</button><button class="btn o s" onclick="demo('admin')">Admin</button></div></div></div>`}
+/* ---------- student ---------- */
+function go(t){ui.tab=t;ui.sub=null;ui.f=false;ui.q='';R()}
+function nav(){const un=db.notifs.filter(n=>n.sid===ui.u.id&&!n.r).length;return`<div class="nav">${[['home','🏠','Home'],['appts','📅','Appointments'],['notifs','🔔','Notifications'],['profile','👤','Profile']].map(([k,i,l])=>`<button class="${ui.tab===k?'on':''}" onclick="go('${k}')"><span>${i}</span>${l}${k==='notifs'&&un?`<b class="dot">${un}</b>`:''}</button>`).join('')}</div>`}
+function student(){const s=ui.sub,c=s==='book'?book():s==='queue'?qstat():{home,appts,notifs,profile}[ui.tab]();return`<div class="ph">${c}${s?'':nav()}</div>`}
+function qcard(q,click){return`<div class="card ${click?'clk':''}" ${click?`onclick="ui.sub='queue';R()"`:''}><div class="row"><small>Queue Number</small>${bdg(q.status)}</div><div class="big">${q.num}</div><p class="mu" style="margin:8px 0 0">Estimated wait time<br><b style="color:var(--tx)">🕒 ${est(q)}</b></p></div>`}
+function home(){const q=myq(),nx=!q?'Book an appointment or check in to get a queue number.':q.status==='waiting'?'You will be called soon.':q.status==='called'?'Please proceed to the clinic.':'You are being attended.';
+return`<h2 style="margin:6px 0 16px">Hello, ${esc(ui.u.name.split(' ')[0])}!<br><small>Student</small></h2>
+<div class="card clk row" onclick="ui.sub='book';R()"><div><b>Book an Appointment</b><br><small>Schedule a visit to the school clinic</small></div><span>›</span></div>
+${q?qcard(q,1):'<div class="card"><small>Your Queue Number</small><p class="mu">You are not in the queue. Check in from an appointment that is scheduled for today.</p></div>'}
+<div class="card"><b>Next Update</b><br><small>${nx}</small></div>`}
+function qstat(){const q=myq()||[...db.queue].reverse().find(x=>x.sid===ui.u.id);const back=`<div class="row" style="margin:6px 0 14px"><button class="ic" onclick="ui.sub=null;R()">‹</button><b>My Queue Status</b><span></span></div>`;
+if(!q)return back+'<div class="card mu">No queue activity yet.</div>';const i={waiting:1,called:2,attended:3,completed:4,cancelled:1}[q.status];
+return back+qcard(q)+`<div class="card"><b>Progress</b><div class="tl">${['Checked in','Waiting','Called','Being Attended','Completed'].map((l,k)=>`<div class="${k<i?'dn':k===i?'cur':''}">${l}${k===0?`<br><small>${tm(q.t)}</small>`:''}</div>`).join('')}</div></div>${q.status==='waiting'?'<button class="btn r" onclick="leave()">Leave queue</button>':''}`}
+function leave(){const q=myq();if(q){q.status='cancelled';save();ui.sub=null;toast('You left the queue');R()}}
+function appts(){const L=db.appts.filter(a=>a.sid===ui.u.id).sort((a,b)=>(a.date+a.h).localeCompare(b.date+b.h)),td=iso(new Date());
+return`<h2 style="margin:6px 0 14px">My Appointments</h2>${L.map(a=>`<div class="card"><div class="row"><b>${esc(a.reason)}</b>${bdg(a.status)}</div><small>${fd(a.date)}, ${ft(a.h)}</small>${a.status==='confirmed'?`<div class="f" style="margin-top:10px">${a.date===td&&!myq()&&!a.ci?`<button class="btn s" onclick="checkin(${a.id})">Check in</button>`:''}<button class="btn s r" onclick="cancelA(${a.id})">Cancel</button></div>`:''}</div>`).join('')||'<div class="card mu">No appointments yet.</div>'}<button class="btn" onclick="ui.sub='book';R()">Book an Appointment</button>`}
+function checkin(id){const a=db.appts.find(x=>x.id===id);a.ci=1;join(a.sid,a.name,a.reason,'Routine');toast('Checked in!');ui.sub='queue';R()}
+function cancelA(id){db.appts.find(x=>x.id===id).status='cancelled';save();R()}
+function notifs(){const L=db.notifs.filter(n=>n.sid===ui.u.id);const h=`<h2 style="margin:6px 0 14px">Notifications</h2>${L.map(n=>`<div class="card"><div class="row"><b>${n.type==='ok'?'✅ ':n.type==='q'?'🔔 ':'ℹ️ '}${n.title}</b><small>${tm(n.t)}</small></div><small>${n.sub}</small>${n.r?'':' <span class="bg b-p">New</span>'}</div>`).join('')||'<div class="card mu">Nothing yet.</div>'}`;L.forEach(n=>n.r=1);save();return h}
+function profile(){return`<h2 style="margin:6px 0 14px">Profile</h2><div class="card"><b>${esc(ui.u.name)}</b><br><small>ID: ${esc(ui.u.id)}</small></div><button class="btn r" onclick="logout()">Log out</button>`}
+/* booking */
+function mo(d){const m=ui.b.m;ui.b.m=new Date(m.getFullYear(),m.getMonth()+d,1);R()}
+function pick(s){ui.b.date=s;ui.b.h=null;R()}
+function book(){const b=ui.b,td=iso(new Date()),nh=new Date().getHours();let body;
+if(b.step===1){const y=b.m.getFullYear(),m=b.m.getMonth(),f=new Date(y,m,1).getDay(),n=new Date(y,m+1,0).getDate(),mx=new Date();mx.setDate(mx.getDate()+60);let c='';for(let i=0;i<f;i++)c+='<i></i>';
+for(let d=1;d<=n;d++){const dt=new Date(y,m,d),s=iso(dt);c+=`<button class="d ${s===b.date?'sel':''}" ${s<td||dt.getDay()%6===0||dt>mx?'disabled':''} onclick="pick('${s}')">${d}</button>`}
+let sl='';for(let h=db.set.open;h<db.set.close;h++){const off=!b.date||db.appts.some(a=>a.date===b.date&&a.h===h&&a.status==='confirmed')||(b.date===td&&h<=nh);sl+=`<button class="${b.h===h?'sel':''}" ${off?'disabled':''} onclick="ui.b.h=${h};R()">${ft(h)}</button>`}
+body=`<b>Select Date</b><div class="card" style="margin-top:8px"><div class="cm"><button class="ic" onclick="mo(-1)">‹</button><b>${b.m.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</b><button class="ic" onclick="mo(1)">›</button></div><div class="cg">${'SMTWTFS'.split('').map(x=>`<small>${x}</small>`).join('')}${c}</div></div><b>Available Time Slots</b><div class="sl" style="margin:8px 0 14px">${sl}</div><button class="btn" ${b.date&&b.h!=null?'':'disabled'} onclick="ui.b.step=2;R()">Next</button>`}
+else if(b.step===2)body=`<b>Reason for visit</b><select style="margin-top:8px" onchange="ui.b.reason=this.value">${REASONS.map(r=>`<option ${r===b.reason?'selected':''}>${r}</option>`).join('')}</select><textarea rows="3" placeholder="Additional notes (optional)" oninput="ui.b.notes=this.value">${esc(b.notes)}</textarea><button class="btn" onclick="ui.b.step=3;R()">Next</button>`;
+else body=`<div class="card"><b>Confirm your appointment</b><p>📅 ${fd(b.date)}, ${ft(b.h)}<br>🩺 ${esc(b.reason)}${b.notes?`<br>📝 ${esc(b.notes)}`:''}</p></div><button class="btn" onclick="confirmB()">Confirm</button>`;
+return`<div class="row" style="margin:6px 0 14px"><button class="ic" onclick="${b.step>1?'ui.b.step--':'ui.sub=null'};R()">‹</button><b>Book an Appointment</b><span></span></div><div class="row" style="margin-bottom:14px">${['Date & Time','Reason','Confirm'].map((l,i)=>`<small style="${b.step===i+1?'color:var(--pri);font-weight:700':''}">${i+1}. ${l}</small>`).join('')}</div>${body}`}
+function confirmB(){const b=ui.b;if(db.appts.some(a=>a.sid===ui.u.id&&a.date===b.date&&a.status==='confirmed'))return toast('You already have an appointment that day');
+db.appts.push({id:db.id++,sid:ui.u.id,name:ui.u.name,date:b.date,h:b.h,reason:b.reason,notes:b.notes,status:'confirmed'});notify(ui.u.id,'Your appointment is confirmed',`${b.reason} • ${fd(b.date)}, ${ft(b.h)}`,'ok');save();
+ui.b={step:1,m:new Date(),date:null,h:null,reason:'Check-up',notes:''};ui.sub=null;ui.tab='appts';toast('Appointment booked!');R()}
+/* ---------- staff / admin ---------- */
+const match=s=>!ui.q||(s.name+' '+(s.sid||s.id||'')).toLowerCase().includes(ui.q.toLowerCase());
+function staff(){const u=ui.u,adm=u.role==='admin',nv=[['queue','🧾','Queue'],['appts','📅','Appointments'],['students','👥','Students'],['reports','📊','Reports']];if(adm)nv.push(['settings','⚙️','Settings']);
+const pg={queue:squeue,appts:sappts,students:sstud,reports:srep,settings:sset}[ui.tab]();
+return`<div class="sd"><aside><div class="brand">✚ <b>${esc(db.set.name)}</b></div>${nv.map(([k,i,l])=>`<button class="${ui.tab===k?'on':''}" onclick="go('${k}')">${i} ${l}</button>`).join('')}<button onclick="logout()" style="margin-top:auto">↩ Log out</button></aside>
+<main><div class="top">${['queue','appts','students'].includes(ui.tab)?`<input id="sq" placeholder="Search student name or ID..." value="${esc(ui.q)}" oninput="ui.q=this.value;ui.f=true;R()">`:'<span></span>'}<span style="text-align:right"><b>${esc(u.name)}</b><br><small>${adm?'Administrator':'Clinic Personnel'}</small></span></div>${pg}</main></div>`}
+function squeue(){const L=db.queue.filter(q=>act(q)&&match(q)).sort((a,b)=>(a.status==='waiting')-(b.status==='waiting')||ord(a,b));
+const nxt={waiting:['Call','called'],called:['Start','attended'],attended:['Complete','completed']};
+return`<h2 style="margin-bottom:12px">Waiting Queue</h2><div class="card"><b>Add walk-in</b><div class="f" style="margin-top:8px"><input id="wn" list="sl" placeholder="Student name"><datalist id="sl">${db.users.filter(x=>x.role==='student').map(x=>`<option value="${esc(x.name)}">`).join('')}</datalist><select id="wr">${REASONS.map(r=>`<option>${r}</option>`).join('')}</select><select id="wp"><option>Routine</option><option>Urgent</option></select><button class="btn s" onclick="walk()">Add</button></div></div>
+<div class="card tw"><table><tr><th>#</th><th>Name</th><th>Priority</th><th>Reason</th><th>Status</th><th>Action</th></tr>${L.map(q=>`<tr><td><b>${q.num}</b></td><td>${esc(q.name)}</td><td><span class="bg b-${q.pri==='Urgent'?'r':'o'}">${q.pri}</span></td><td>${esc(q.reason)}</td><td>${bdg(q.status)}</td><td><div class="f" style="flex-wrap:nowrap"><button class="btn s" onclick="setS(${q.id},'${nxt[q.status][1]}')">${nxt[q.status][0]}</button><button class="btn s r" title="Remove" onclick="setS(${q.id},'cancelled')">✕</button></div></td></tr>`).join('')||'<tr><td colspan="6" class="mu">Queue is empty.</td></tr>'}</table></div>`}
+function walk(){const n=$('#wn').value.trim();if(!n)return toast('Enter a name');const s=db.users.find(x=>x.role==='student'&&x.name.toLowerCase()===n.toLowerCase());join(s?s.id:null,s?s.name:n,$('#wr').value,$('#wp').value);R()}
+function sappts(){const td=iso(new Date()),up=a=>a.status==='confirmed'&&a.date>=td,L=db.appts.filter(a=>match(a)&&(ui.at==='up'?up(a):!up(a))).sort((a,b)=>(a.date+pad(a.h)).localeCompare(b.date+pad(b.h)));
+return`<h2 style="margin-bottom:12px">Appointments</h2><div class="tabs"><button class="${ui.at==='up'?'on':''}" onclick="ui.at='up';R()">Upcoming</button><button class="${ui.at==='past'?'on':''}" onclick="ui.at='past';R()">Past</button></div>${L.map(a=>`<div class="card row"><div><b>${esc(a.name)}</b><br><small>${fd(a.date)}, ${ft(a.h)} • ${esc(a.reason)}</small></div><div class="f" style="flex:none;flex-wrap:nowrap;align-items:center">${bdg(a.status)}${up(a)?`<button class="btn s" onclick="apS(${a.id},'completed')">Done</button><button class="btn s r" onclick="apS(${a.id},'cancelled')">Cancel</button>`:''}</div></div>`).join('')||'<div class="card mu">Nothing here.</div>'}`}
+function apS(id,s){const a=db.appts.find(x=>x.id===id);a.status=s;if(s==='cancelled')notify(a.sid,'Appointment cancelled',`${fd(a.date)}, ${ft(a.h)} was cancelled by the clinic.`,'i');save();R()}
+function sstud(){const L=db.users.filter(u=>u.role==='student'&&match({name:u.name,id:u.id}));
+return`<h2 style="margin-bottom:12px">Students</h2><div class="card tw"><table><tr><th>ID</th><th>Name</th><th>Visits</th><th>Appointments</th><th>Status</th></tr>${L.map(u=>`<tr><td>${esc(u.id)}</td><td>${esc(u.name)}</td><td>${db.queue.filter(q=>q.sid===u.id&&q.status==='completed').length}</td><td>${db.appts.filter(a=>a.sid===u.id&&a.status==='confirmed').length}</td><td><span class="bg b-${u.on?'o':'r'}">${u.on?'Active':'Inactive'}</span></td></tr>`).join('')}</table></div>`}
+function srep(){const Q=db.queue,by={};Q.forEach(q=>by[q.reason]=(by[q.reason]||0)+1);const mx=Math.max(1,...Object.values(by)),td=iso(new Date());
+const T=[['Total visits',Q.length],['Waiting now',Q.filter(q=>q.status==='waiting').length],['Completed',Q.filter(q=>q.status==='completed').length],['Upcoming appts',db.appts.filter(a=>a.status==='confirmed'&&a.date>=td).length]];
+return`<h2 style="margin-bottom:12px">Reports</h2><div class="g">${T.map(([l,v])=>`<div class="card"><small>${l}</small><div class="big">${v}</div></div>`).join('')}</div><div class="card"><b>Visits by reason</b>${Object.entries(by).map(([r,n])=>`<div style="margin-top:10px"><div class="row"><span>${esc(r)}</span><b>${n}</b></div><div class="bar" style="width:${n/mx*100}%"></div></div>`).join('')||'<p class="mu">No data yet.</p>'}</div>`}
+function sset(){const t=ui.st,tabs=`<div class="tabs">${[['users','Users'],['roles','Roles & Permissions'],['sys','System']].map(([k,l])=>`<button class="${t===k?'on':''}" onclick="ui.st='${k}';R()">${l}</button>`).join('')}</div>`;let b;
+if(t==='users')b=`<div class="card"><b>Add user</b><div class="f" style="margin-top:8px"><input id="au" placeholder="ID"><input id="an" placeholder="Full name"><select id="ar"><option value="student">Student</option><option value="staff">Clinic Personnel</option><option value="admin">Administrator</option></select><input id="ap" placeholder="Password"><button class="btn s" onclick="addU()">Add User</button></div></div><div class="card tw"><table><tr><th>Name</th><th>ID</th><th>Role</th><th>Status</th></tr>${db.users.map(u=>`<tr><td>${esc(u.name)}</td><td>${esc(u.id)}</td><td>${{student:'Student',staff:'Clinic Personnel',admin:'Administrator'}[u.role]}</td><td><button class="bg b-${u.on?'o':'r'}" style="border:0;cursor:pointer" onclick="togU('${esc(u.id)}')">${u.on?'Active':'Inactive'}</button></td></tr>`).join('')}</table></div>`;
+else if(t==='roles'){const Y='✔',N='–';b=`<div class="card tw"><table><tr><th>Permission</th><th>Student</th><th>Clinic Personnel</th><th>Administrator</th></tr>${[['Book / cancel own appointments',1,1,1],['View own queue status',1,0,0],['Manage queue (call, attend, complete)',0,1,1],['Manage all appointments',0,1,1],['View reports',0,1,1],['Manage users & settings',0,0,1]].map(r=>`<tr><td>${r[0]}</td>${[1,2,3].map(i=>`<td>${r[i]?Y:N}</td>`).join('')}</tr>`).join('')}</table></div>`}
+else b=`<div class="card" style="max-width:420px"><label><small>Clinic name</small></label><input id="sn" value="${esc(db.set.name)}"><div class="f"><div><label><small>Opens (hour, 0–23)</small></label><input id="so" type="number" value="${db.set.open}"></div><div><label><small>Closes (hour)</small></label><input id="sc" type="number" value="${db.set.close}"></div></div><label><small>Avg. minutes per patient (wait estimate)</small></label><input id="sa" type="number" value="${db.set.avg}"><button class="btn" onclick="saveSys()">Save settings</button><button class="btn r" style="margin-top:10px" onclick="resetD()">Reset demo data</button></div>`;
+return`<h2 style="margin-bottom:12px">Settings</h2>${tabs}${b}`}
+function addU(){const id=$('#au').value.trim(),n=$('#an').value.trim(),p=$('#ap').value;if(!id||!n||!p)return toast('Fill in all fields');if(db.users.some(x=>x.id.toLowerCase()===id.toLowerCase()))return toast('ID already exists');db.users.push({id,name:n,role:$('#ar').value,pw:p,on:1});save();toast('User added');R()}
+function togU(id){const u=db.users.find(x=>x.id===id);if(u.id===ui.u.id)return toast('You can’t deactivate yourself');u.on=u.on?0:1;save();R()}
+function saveSys(){const o=+$('#so').value,c=+$('#sc').value,a=+$('#sa').value;if(!(o>=0&&c<=24&&c>o&&a>0))return toast('Please check the values');db.set={name:$('#sn').value.trim()||'School Clinic',open:o,close:c,avg:a};save();toast('Settings saved');R()}
+function resetD(){if(confirm('Reset all data to the demo defaults?')){db=seed();save();logout()}}
+function R(){const a=$('#app');a.innerHTML=!ui.u?loginV():ui.u.role==='student'?student():staff();if(ui.f){const s=$('#sq');if(s){s.focus();s.setSelectionRange(99,99)}}}
+R();
+</script></body></html>
